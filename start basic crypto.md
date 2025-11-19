@@ -43,4 +43,9 @@ x \equiv a_{k} \pmod{m_{k}}
 $$
 >>模M = m<sub>1</sub> * m<sub>2</sub> * m<sub>3</sub> * …… * m<sub>k</sub>
 >><br>Mi = M /mi&emsp;&emsp;&emsp;逆元x = pow（M<sub>i</sub>,-1,m<sub>i</sub>)
->><br>x ≡ (a<sub>1</sub> * M<sub>1</sub> * x<sub>1</sub> + a<sub>2</sub> * M<sub>2</sub> * x<sub>2</sub>+……+a<sub>k</sub> * M<sub>k</sub> * x<sub>k</sub>)mod(M)
+>>><br>x ≡ (a<sub>1</sub> * M<sub>1</sub> * x<sub>1</sub> + a<sub>2</sub> * M<sub>2</sub> * x<sub>2</sub>+……+a<sub>k</sub> * M<sub>k</sub> * x<sub>k</sub>)mod(M)
+```python
+import Crypto.Util.number from *
+import gmpy2
+me = gmpy2.iroot(x,k)[0]
+```
