@@ -153,20 +153,162 @@ print(long_to_bytes(m))
 
 **7.线性同余生成器（lcg）**
 ><br>递推公式：X <sub>n+1</sub>=(a×X <sub>n</sub>+b)modm
-><br>参数说明：X <sub>n</sub>：当前状态（种子） &emsp;&emsp;a：乘数 &emsp;&emsp;b：增量 &emsp;&emsp;m：模数
+>><br>参数说明：X <sub>n</sub>：当前状态（种子） &emsp;&emsp;a：乘数 &emsp;&emsp;b：增量 &emsp;&emsp;m：模数
+>><br>
+>>><br>求初始Seed：
+<br> &emsp;&emsp;x<sub>n</sub>≡(x<sub>n+1</sub> - b) * a^(-1) mod(m)
+```python
+from Crypto.Util.number import *
+import gmpy2
+flag = b'NSSCTF{******}'
+a = 113439939100914101419354202285461590291215238896870692949311811932229780896397
+b = 72690056717043801599061138120661051737492950240498432137862769084012701248181
+m = 72097313349570386649549374079845053721904511050364850556329251464748004927777
+c = 9772191239287471628073298955242262680551177666345371468122081567252276480156
+class LCG:
+    def __init__(self, seed, a, b, m):
+        self.seed = seed    
+        self.a = a 
+        self.b = b 
+        self.m = m 
 
->><br>求初始Seed：
-<br> x<sub>n</sub>≡(x<sub>n+1</sub> - b) * a^(-1) mod(m)
->><br>求a：
-><br>x<sub>n+1</sub>=(a * x<sub>n</sub> +  b)mod(m)
-><br>x<sub>n</sub>=(a * x<sub>n-1</sub> +  b)mod(m)
-><br>>x<sub>n+1</sub> - x<sub>n</sub> = (a * (x<sub>n</sub> - x<sub>n-1</sub> ))mod(m)
-><br>a ≡ (x<sub>n+1</sub> - x<sub>n</sub>) * (x<sub>n</sub> - x<sub>n-1</sub> )^(-1) mod (m)
->><br>求b：
-><br>b ≡ (x<sub>n+1</sub> - a * x<sub>n</sub>) mod(m)
->><br>求m：
-><br>t<sub>n</sub> = x<sub>n+1</sub> - x<sub>n</sub>
-><br>=[(a*x<sub>n</sub>+b)-(a*x<sub>n-1</sub>+b)+b)]mod(m)
-><br>=a*t<sub>n-1</sub>+b)+b)mod(m)
-><br>t<sub>n+1</sub>*t<sub>n-1</sub>=a*t<sub>n</sub>*t<sub>n-1</sub>=(t<sub>n</sub>)^(2)
+    def generate(self):
+     self.seed = (self.a * self.seed + self.b) % self.m
+     return self.seed
+a_ = pow(a,-1,m)
+for i in range(2 ** 16):
+    c = (c - b) * a_ % m
+    flag = (long_to_bytes(c))
+    if b'NSSCTF{' in flag:  
+        print(flag)
+        break
 
+
+```
+>>><br>求a：
+<br>&emsp;&emsp;x<sub>n+1</sub>=(a * x<sub>n</sub> +  b)mod(m)
+<br>&emsp;&emsp;x<sub>n</sub>=(a * x<sub>n-1</sub> +  b)mod(m)
+<br>&emsp;&emsp;x<sub>n+1</sub> - x<sub>n</sub> = (a * (x<sub>n</sub> - x<sub>n-1</sub> ))mod(m)
+<br>&emsp;&emsp;a ≡ (x<sub>n+1</sub> - x<sub>n</sub>) * (x<sub>n</sub> - x<sub>n-1</sub> )^(-1) mod (m)
+```python
+from Crypto.Util.number import *
+import gmpy2
+flag = b'NSSCTF{******}'
+a = 83968440254358975953360088805517488739689448515913931281582194839594954862517
+m = 77161425490597512806099499399561161959645895427463118872087051902811605680317
+
+c1 = 43959768681328408257423567932475057408934775157371406900460140947365416240650
+
+c2 = 8052043336238864355872102889254781281466728072798160448260752595038552944808
+class LCG:
+    def __init__(self, seed, a, b, m):
+     self.seed = seed 
+     self.a = a 
+     self.b = b 
+     self.m = m 
+    def generate(self):
+        self.seed = (self.a * self.seed + self.b) % self.m
+        return self.seed
+
+lcg = LCG(bytes_to_long(flag), getPrime(256), getPrime(256), getPrime(256))
+a_ = pow(a,-1,m)
+b  = (c2 - a * c1) % m
+c = c1
+for i in range(2 ** 16):
+    c = (c - b) * a_ % m
+    flag = (long_to_bytes(c))
+    if b'NSSCTF{'in flag:
+       print(flag)
+       break
+
+```
+>>><br>求b：
+<br>&emsp;&emsp;b ≡ (x<sub>n+1</sub> - a * x<sub>n</sub>) mod(m)
+```python
+from Crypto.Util.number import *
+
+flag = b'NSSCTF{******}'
+m = 96343920769213509183566159649645883498232615147408833719260458991750774595569
+
+c1 = 10252710164251491500439276567353270040858009893278574805365710282130751735178
+
+c2 = 45921408119394697679791444870712342819994277665465694974769614615154688489325
+
+c3 = 27580830484789044454303424960338587428190874764114011948712258959481449527087
+
+class LCG:
+     def __init__(self, seed, a, b, m):
+         self.seed = seed
+         self.a = a 
+         self.b = b 
+         self.m = m
+
+     def generate(self):
+        self.seed = (self.a * self.seed + self.b) % self.m
+        return self.seed
+
+lcg = LCG(bytes_to_long(flag), getPrime(256), getPrime(256), getPrime(256))
+a = ((c3- c2) * (pow(c2 - c1,-1,m))) % m
+b = (c2 - a * c1) % m
+c =c1
+a_ = pow(a,-1,m)
+for i in range(2 ** 16):
+    c = (c -b) * a_ % m
+    flag = (long_to_bytes(c))
+    if b'NSSCTF{' in flag:
+        print(flag)
+        break
+
+```
+>>><br>求m：
+<br>&emsp;&emsp;t<sub>n</sub> = x<sub>n+1</sub> - x<sub>n</sub>
+<br>&emsp;&emsp;=[(a*x<sub>n</sub>+b)-(a*x<sub>n-1</sub>+b)+b)]mod(m)
+<br>&emsp;&emsp;=a*t<sub>n-1</sub>+b)+b)mod(m)
+<br>&emsp;&emsp;t<sub>n+1</sub>*t<sub>n-1</sub>=a*t<sub>n</sub>*t<sub>n-1</sub>=t<sub>n</sub>^2
+```python
+from Crypto.Util.number import *
+import gmpy2
+flag = b'NSSCTF{******}'
+c1 = 47513456973995038401745402734715062697203139056061145149400619356555247755807
+
+c2 = 57250853157569177664354712595458385047274531304709190064872568447414717938749
+
+c3 = 30083421760501477670128918578491346192479634327952674530130693136467154794135
+
+c4 = 38739029019071698539301566649413274114468266283936163804522278316663267625091
+
+c5 = 42506270962409723585330663340839465445484970240895653869393419413017237427900
+
+t1 = c2 - c1
+t2 = c3 - c2
+t3 = c4 - c3
+t4 = c5 - c4
+class LCG:
+    def __init__(self, seed, a, b, m):
+     self.seed = seed 
+     self.a = a 
+     self.b = b 
+     self.m = m 
+
+def generate(self):
+ self.seed = (self.a * self.seed + self.b) % self.m
+ return self.seed
+
+lcg = LCG(bytes_to_long(flag), getPrime(256), getPrime(256), getPrime(256))
+m = 0
+m1 = gmpy2.gcd(t3 * t1 - t2 ** 2,m)
+m2 = gmpy2.gcd(t4 * t2 - t3 ** 2,m1)
+g = gmpy2.gcd(c2 - c1,m2)
+m = m2 // g
+a = (c3 - c2) * (pow(c2 - c1,-1,m)) % m
+b = (c2 - a * c1) % m
+
+a_ = pow(a,-1,m)
+c = c1
+for i in range(2 ** 16):
+  c = (c - b) * a_ % m
+  flag = (long_to_bytes(c))
+  if b'NSSCTF{' in flag:
+    print(flag)
+    break
+```
