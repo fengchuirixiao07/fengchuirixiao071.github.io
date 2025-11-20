@@ -334,7 +334,6 @@ for i in range(2 ** 16):
 >>>><br>计算s ：  s = k^(-1)(H(m)+ r * d)mod m
 
 >>>><br>*解密过程*
->>>>><br>C1 = r   C2 = s
 >>>>><br>椭圆曲线Ep(a,b)（p为模数），基点（生成元）G(x,y)，G点的阶数n，私钥k，公钥K(x,y)，随机整数r，明文为一点m(x,y)，密文为两点c1(x,y)c2(x,y)（其中基点G，明文m，公钥K，密文c1、c2都是椭圆曲线E上的点）
 
 >>>>><br>选择私钥k（k<n）
@@ -344,7 +343,7 @@ for i in range(2 ** 16):
 >>>>><br>c1 = m+r*K
 >>>>><br>c2 = r*G
 >>>>><br>解密：
->>>>><br>m = c1-k*c2（= c1-r*K)
+>>>>><br>m = c1-k*c2= (c1-r*K)
 ```python
 from Crypto.Util.number import long_to_bytes
 
